@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد الايقونات الذكي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #1e293b;
+            --background-color: #0f172a;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 450px;
+            width: 100%;
+            background: var(--secondary-color);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+        }
+        .input-style {
+            background-color: #334155;
+            border: 1px solid #475569;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+        .input-style:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
+        }
+        .btn-primary {
+            background: var(--primary-color);
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .icon-preview {
+            width: 100%;
+            height: 250px;
+            background-color: #1e293b; /* Initial Solid Background */
+            border-radius: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* Checkerboard styling applied via JS when transparent toggle is ON */
+            background-image: none; 
+        }
+        .icon-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.5s;
+        }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-3xl font-bold text-center mb-6 text-indigo-300">مولد الايقونات الذكي</h1>
+    <p class="text-center text-gray-400 mb-6">أنشئ أيقونات فريدة بصيغ PNG بأسلوب SVG أو غيره.</p>
+
+    <div class="space-y-4">
+        <!-- Input Prompt -->
+        <div>
+            <label for="prompt" class="block text-sm font-medium text-gray-300 mb-1">أدخل وصف الأيقونة:</label>
+            <input type="text" id="prompt" value="A minimalist vector logo of a wolf's head in flat design" placeholder="مثال: شعار نسر بخطوط ذهبية بسيطة" class="w-full input-style">
+        </div>
+
+        <!-- Style Selector -->
+        <div class="flex space-x-4 rtl:space-x-reverse items-end">
+            <div class="flex-1">
+                <label for="style" class="block text-sm font-medium text-gray-300 mb-1">اختر النمط:</label>
+                <!-- Removed "white background" from options, as it's added dynamically in JS -->
+                <select id="style" class="w-full input-style appearance-none bg-no-repeat bg-[length:1.5rem_1.5rem] bg-[position:left_0.75rem_center] rtl:bg-[position:right_0.75rem_center]">
+                    <option value="minimalist vector icon">أيقونة متجهية بسيطة (SVG Style)</option>
+                    <option value="flat material design icon">أيقونة تصميم مسطح</option>
+                    <option value="3D isometric icon">أيقونة ثلاثية الأبعاد متساوية القياس</option>
+                    <option value="detailed line art icon">أيقونة فن خطي مفصل</option>
+                    <option value="Neumorphism soft UI icon">أيقونة نيومورفيزم (واجهة ناعمة)</option>
+                    <option value="Glassmorphism frosted glass icon">أيقونة جلاسمورفيزم (زجاج مصنفر)</option>
+                    <option value="vibrant gradient colors icon">أيقونة بألوان متدرجة نابضة بالحياة</option>
+                    <option value="pixel art 8-bit icon">أيقونة فن البكسل (8-بت)</option>
+                    <option value="retro aesthetic icon">أيقونة بأسلوب ريترو قديم</option>
+                </select>
+            </div>
+            <!-- Size Selector (Enabled and value used in prompt) -->
+            <div class="w-24">
+                <label for="size" class="block text-sm font-medium text-gray-300 mb-1">الحجم (px):</label>
+                <input type="number" id="size" value="512" min="64" max="1024" class="w-full input-style text-center">
+            </div>
+        </div>
+
+        <!-- Transparency Toggle -->
+        <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+            <label for="transparentBgToggle" class="text-sm font-medium text-gray-300">معاينة وإزالة الخلفية</label>
+            <label class="switch">
+                <input type="checkbox" id="transparentBgToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+
+        <!-- Generate Button -->
+        <button id="generateBtn" onclick="generateIcon()" class="btn-primary w-full py-3 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 rtl:space-x-reverse">
+            <span id="btnText">توليد الأيقونة</span>
+            <div id="loadingIndicator" class="loading-spinner hidden"></div>
+        </button>
+    </div>
+
+    <!-- Message Box -->
+    <div id="messageBox" class="mt-6 p-3 text-sm text-center bg-yellow-900 border border-yellow-700 rounded-lg hidden" role="alert"></div>
+
+    <!-- Icon Preview Area -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-3 text-gray-200 text-center">معاينة الأيقونة</h2>
+        <div id="iconPreview" class="icon-preview">
+            <p class="text-gray-500">سيظهر الناتج هنا...</p>
+        </div>
+    </div>
+
+    <!-- Download Button -->
+    <button id="downloadBtn" onclick="downloadImage()" class="btn-primary w-full py-3 mt-6 rounded-xl font-semibold text-lg hidden">
+        تحميل كصورة PNG
+    </button>
+
+    <p class="text-xs text-center text-gray-500 mt-4">
+        ملاحظة: النماذج الحالية تولد صورًا نقطية (PNG). لضمان إزالة خلفية جيدة، نطلب من الذكاء الاصطناعي دائمًا خلفية بيضاء.
+    </p>
+
+</div>
+
+<script>
+    // Global UI elements
+    const promptInput = document.getElementById('prompt');
+    const styleSelect = document.getElementById('style');
+    const sizeInput = document.getElementById('size'); // New reference
+    const generateBtn = document.getElementById('generateBtn');
+    const btnText = document.getElementById('btnText');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const iconPreview = document.getElementById('iconPreview');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const messageBox = document.getElementById('messageBox');
+    const transparentBgToggle = document.getElementById('transparentBgToggle');
+
+    // API Configuration
+    const apiKey = "AIzaSyDdAtMBXcRXJL49QhAsJWPquDZXxi0KOHc"; // ضع مفتاح API الخاص بك هنا
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+    let originalImageDataUrl = null; // Stores the raw AI output (with white background)
+    let transparentImageDataUrl = null; // Stores the processed transparent output
+
+    /**
+     * Helper function to show a temporary message.
+     * @param {string} message - The message text.
+     * @param {string} type - 'success', 'error', or 'warning'.
+     */
+    function showMessage(message, type) {
+        messageBox.textContent = message;
+        messageBox.className = 'mt-6 p-3 text-sm text-center rounded-lg';
+        messageBox.classList.remove('hidden');
+
+        if (type === 'error') {
+            messageBox.classList.add('bg-red-900', 'border-red-700', 'text-red-300');
+        } else if (type === 'success') {
+            messageBox.classList.add('bg-green-900', 'border-green-700', 'text-green-300');
+        } else {
+            messageBox.classList.add('bg-yellow-900', 'border-yellow-700', 'text-yellow-300');
+        }
+
+        setTimeout(() => {
+            messageBox.classList.add('hidden');
+        }, 5000);
+    }
+
+    /**
+     * Sets the UI state to loading or idle.
+     * @param {boolean} isLoading
+     */
+    function setLoadingState(isLoading) {
+        generateBtn.disabled = isLoading;
+        if (isLoading) {
+            btnText.textContent = 'جاري التوليد...';
+            loadingIndicator.classList.remove('hidden');
+        } else {
+            btnText.textContent = 'توليد الأيقونة';
+            loadingIndicator.classList.add('hidden');
+        }
+    }
+
+    /**
+     * Removes a solid background (e.g., white) from an image data URL and returns a new transparent data URL.
+     * @param {string} imageDataUrl - The base64 data URL of the image.
+     * @returns {Promise<string>} A promise that resolves with the new transparent image data URL.
+     */
+    function removeBackground(imageDataUrl) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+
+                // Detect the background color from corners (assuming it's a solid, simple background, white is forced in prompt)
+                const cornerPixels = [
+                    [pixels[0], pixels[1], pixels[2]], // Top-left
+                    [pixels[(canvas.width - 1) * 4], pixels[(canvas.width - 1) * 4 + 1], pixels[(canvas.width - 1) * 4 + 2]], // Top-right
+                    [pixels[(canvas.height - 1) * canvas.width * 4], pixels[(canvas.height - 1) * canvas.width * 4 + 1], pixels[(canvas.height - 1) * canvas.width * 4 + 2]], // Bottom-left
+                    [pixels[(canvas.height * canvas.width - 1) * 4], pixels[(canvas.height * canvas.width - 1) * 4 + 1], pixels[(canvas.height * canvas.width - 1) * 4 + 2]] // Bottom-right
+                ];
+
+                let bgR = 0, bgG = 0, bgB = 0;
+                cornerPixels.forEach(p => { bgR += p[0]; bgG += p[1]; bgB += p[2]; });
+                bgR = Math.round(bgR / cornerPixels.length);
+                bgG = Math.round(bgG / cornerPixels.length);
+                bgB = Math.round(bgB / cornerPixels.length);
+
+                const tolerance = 30; // How close a pixel color needs to be to the background color to be made transparent
+
+                for (let i = 0; i < pixels.length; i += 4) {
+                    const r = pixels[i];
+                    const g = pixels[i + 1];
+                    const b = pixels[i + 2];
+
+                    if (Math.abs(r - bgR) < tolerance &&
+                        Math.abs(g - bgG) < tolerance &&
+                        Math.abs(b - bgB) < tolerance) {
+                        pixels[i + 3] = 0; // Set alpha to 0 (transparent)
+                    }
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.src = imageDataUrl;
+        });
+    }
+
+    /**
+     * Updates the preview and download button based on the toggle state.
+     */
+    function updatePreview() {
+        if (!originalImageDataUrl) return;
+
+        const isTransparent = transparentBgToggle.checked;
+        const urlToDisplay = isTransparent && transparentImageDataUrl ? transparentImageDataUrl : originalImageDataUrl;
+        
+        // Update Preview Image
+        iconPreview.innerHTML = `<img src="${urlToDisplay}" alt="Generated Icon">`;
+
+        // Update Preview Background (Checkerboard for transparent, solid for original)
+        if (isTransparent) {
+            // Apply Checkerboard pattern
+            iconPreview.style.backgroundImage = `linear-gradient(45deg, #2e3a4e 25%, transparent 25%),
+                                              linear-gradient(-45deg, #2e3a4e 25%, transparent 25%),
+                                              linear-gradient(45deg, transparent 75%, #2e3a4e 75%),
+                                              linear-gradient(-45deg, transparent 75%, #2e3a4e 75%)`;
+            iconPreview.style.backgroundSize = '20px 20px';
+            iconPreview.style.backgroundPosition = '0 0, 0 10px, 10px -10px, -10px 0px';
+            downloadBtn.textContent = 'تحميل كصورة PNG (شفافة)';
+        } else {
+            // Apply solid color (same as secondary-color background)
+            iconPreview.style.backgroundImage = 'none';
+            iconPreview.style.backgroundColor = '#1e293b'; 
+            downloadBtn.textContent = 'تحميل كصورة PNG (بالخلفية)';
+        }
+    }
+
+    // Listener for the toggle
+    transparentBgToggle.addEventListener('change', updatePreview);
+
+    /**
+     * Implements exponential backoff for retries.
+     * @param {function} fn - The function to retry.
+     * @param {number} maxRetries - Maximum number of retries.
+     * @returns {Promise<any>}
+     */
+    async function withExponentialBackoff(fn, maxRetries = 5) {
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                return await fn();
+            } catch (error) {
+                if (attempt === maxRetries - 1) {
+                    throw error;
+                }
+                const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    }
+
+    /**
+     * Main function to generate the icon.
+     */
+    async function generateIcon() {
+        const userPrompt = promptInput.value.trim();
+        const selectedStyle = styleSelect.value;
+        const iconSize = sizeInput.value; // Read the size value
+        
+        if (!userPrompt) {
+            showMessage('يرجى إدخال وصف للأيقونة.', 'warning');
+            return;
+        }
+
+        // Include size in the prompt to guide the AI model
+        const finalPrompt = `${userPrompt}, ${selectedStyle}, white background, icon, high resolution, centered, ${iconSize}x${iconSize} pixels`;
+
+        // Clear previous output
+        iconPreview.innerHTML = '<p class="text-gray-500">جاري الإرسال...</p>';
+        downloadBtn.classList.add('hidden');
+        originalImageDataUrl = null;
+        transparentImageDataUrl = null;
+        setLoadingState(true);
+        transparentBgToggle.checked = false; // Reset toggle to show original image first
+
+        const payload = {
+            instances: {
+                prompt: finalPrompt
+            },
+            parameters: {
+                sampleCount: 1,
+                outputMimeType: "image/png"
+            }
+        };
+
+        try {
+            const apiCall = async () => {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    throw new Error(`فشل API: ${response.statusText}`);
+                }
+                return response.json();
+            };
+
+            const result = await withExponentialBackoff(apiCall);
+
+            if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                const base64Data = result.predictions[0].bytesBase64Encoded;
+                
+                // 1. Store Original Image URL
+                originalImageDataUrl = `data:image/png;base64,${base64Data}`;
+                
+                // 2. Process for Transparency (Do this once, store result)
+                iconPreview.innerHTML = '<p class="text-gray-500">تم التوليد. جاري معالجة الخلفية...</p>';
+                transparentImageDataUrl = await removeBackground(originalImageDataUrl);
+                
+                // 3. Display the result according to the toggle state (default is original)
+                updatePreview(); 
+                
+                downloadBtn.classList.remove('hidden');
+                showMessage('تم توليد الأيقونة ومعالجة الخلفية بنجاح!', 'success');
+            } else {
+                iconPreview.innerHTML = '<p class="text-red-400 text-center">لم يتم العثور على صورة في الرد.</p>';
+                showMessage('حدث خطأ: لم يتم العثور على بيانات الصورة.', 'error');
+            }
+
+        } catch (error) {
+            console.error('Generation Failed:', error);
+            iconPreview.innerHTML = '<p class="text-red-400 text-center">فشل التوليد. تحقق من وحدة التحكم (Console).</p>';
+            showMessage(`خطأ في الاتصال: ${error.message}`, 'error');
+
+        } finally {
+            setLoadingState(false);
+        }
+    }
+
+    /**
+     * Downloads the generated image as a PNG file.
+     */
+    function downloadImage() {
+        const isTransparent = transparentBgToggle.checked;
+        // Choose which URL to download based on the current toggle state
+        const urlToDownload = isTransparent ? transparentImageDataUrl : originalImageDataUrl;
+
+        if (urlToDownload) {
+            const link = document.createElement('a');
+            const fileName = promptInput.value.trim().substring(0, 30).replace(/[^a-z0-9]/gi, '_') || 'ai_icon';
+            
+            link.href = urlToDownload;
+            link.download = `${fileName}${isTransparent ? '_transparent' : '_original_bg'}.png`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            showMessage('يرجى توليد أيقونة أولاً.', 'warning');
+        }
+    }
+</script>
+
+</body>
+</html>
+
