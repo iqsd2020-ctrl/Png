@@ -3,477 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد الايقونات الذكي</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>أسلوبي - إعادة صياغة المقالات</title>
+    <!-- Tailwind CSS (مُزال - يتم الاعتماد على الـ CSS المخصص بالأسفل) -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- تحميل خط 'Cairo' لواجهة عربية واضحة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- قواعد Neumorphism الصارمة --- */
+        
         :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #1e293b;
-            --background-color: #0f172a;
+            /* 1. الألوان الأساسية حسب القواعد */
+            --primary-bg: #e0e5ec;
+            --dark-shadow: #a3b1c6;
+            --light-shadow: #ffffff;
+            --font-color: #33373d;
+            --accent-color: #0984e3;
+            --error-color: #e74c3c;
+
+            /* 2. الظلال حسب القواعد */
+            /* ظل العناصر البارزة (للبطاقات والأزرار) */
+            --outset-shadow: 6px 6px 12px var(--dark-shadow), -6px -6px 12px var(--light-shadow);
+
+            /* ظل العناصر الغائرة (لحقول الإدخال أو عند الضغط) */
+            --inset-shadow: inset 6px 6px 12px var(--dark-shadow), inset -6px -6px 12px var(--light-shadow);
         }
+
+        /* --- إعادة الضبط والتنسيق العام --- */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none; /* إزالة التحديد الخارجي */
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
-            color: white;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--primary-bg); /* تطبيق الخلفية الأساسية */
+            color: var(--font-color); /* تطبيق لون الخط الأساسي */
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
+        /* --- الهيكل والتنسيق --- */
+
         .container {
-            max-width: 450px;
             width: 100%;
-            background: var(--secondary-color);
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            padding: 2rem;
+            max-width: 1000px; /* يعادل max-w-5xl */
         }
-        .input-style {
-            background-color: #334155;
-            border: 1px solid #475569;
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s;
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        .input-style:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
+
+        header h1 {
+            font-size: 2.5rem; /* يعادل text-4xl/5xl */
+            font-weight: 700;
+            color: var(--accent-color); /* تطبيق اللون المميز */
         }
-        .btn-primary {
-            background: var(--primary-color);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+
+        header p {
+            font-size: 1.1rem; /* يعادل text-lg */
+            color: var(--font-color);
+            opacity: 0.8;
+            margin-top: 8px;
         }
-        .btn-primary:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+
+        main {
+            background: var(--primary-bg); /* لون العنصر نفس لون الخلفية */
+            border-radius: 22px; /* زوايا ناعمة */
+            padding: 30px; /* يعادل p-6 */
+            width: 100%;
+            /* تطبيق الظل البارز (Outset) */
+            box-shadow: var(--outset-shadow);
+            border: none; /* إزالة الحدود */
         }
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px; /* يعادل gap-6 */
+        }
+
+        /* تنسيق حقول الإدخال (Textarea) */
+
+        label {
+            display: block;
+            font-size: 1.1rem; /* text-lg */
+            font-weight: 600;
+            color: var(--font-color);
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px; /* يعادل h-96 */
+            padding: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            color: var(--font-color);
+            resize: vertical;
+            
+            /* تطبيق تصميم Neumorphism الغائر (Inset) */
+            background: var(--primary-bg); /* نفس لون الخلفية */
+            border: none; /* إزالة الحدود */
+            border-radius: 15px; /* زوايا ناعمة */
+            box-shadow: var(--inset-shadow);
+        }
+
+        textarea:read-only {
+            /* يمكن إضافة تمييز بسيط للذي لا يمكن الكتابة عليه */
+            opacity: 0.9;
+        }
+
+        /* تنسيق الأزرار */
+
+        .button-container {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 150px;
+            padding: 12px 25px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.05rem; /* text-lg */
+            font-weight: 600;
+            cursor: pointer;
+            transition: box-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
+
+            /* تطبيق تصميم Neumorphism البارز (Outset) */
+            background: var(--primary-bg); /* نفس لون الخلفية */
+            border: none; /* إزالة الحدود */
+            border-radius: 15px; /* زوايا ناعمة */
+            box-shadow: var(--outset-shadow);
+        }
+
+        /* اللون المميز للزر الرئيسي */
+        button#rewriteButton {
+            color: var(--accent-color);
+        }
+
+        /* اللون العادي للزر الثانوي */
+        button#copyButton {
+            color: var(--font-color);
+        }
+
+        /* التفاعل (الضغط) حسب القاعدة: التحول إلى الغائر (Inset) */
+        button:hover,
+        button:active {
+            box-shadow: var(--inset-shadow);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            /* إزالة الظل عند التعطيل لجعله مسطحًا */
+            box-shadow: none; 
+        }
+
+        /* منطقة الخطأ */
+        #errorMessage {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--error-color);
+            font-weight: 600;
+            min-height: 1.2em; /* حجز مساحة للرسالة */
+        }
+        
+        /* تعريف شكل مؤشر التحميل (Spinner) */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--accent-color); /* استخدام اللون المميز */
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 20px; /* أصغر قليلاً ليلائم الزر */
+            height: 20px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        .icon-preview {
-            width: 100%;
-            height: 250px;
-            background-color: #1e293b; /* Initial Solid Background */
-            border-radius: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            /* Checkerboard styling applied via JS when transparent toggle is ON */
-            background-image: none; 
+        
+        /* كلاس لإخفاء العناصر (بديل Tailwind) */
+        .hidden {
+            display: none;
         }
-        .icon-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transition: opacity 0.5s;
+        
+        /* استجابة للشاشات المتوسطة (Mobile-first) */
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
-        /* Toggle Switch Styling */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
-        }
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-        input:focus + .slider {
-            box-shadow: 0 0 1px var(--primary-color);
-        }
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+    <!-- تم إزالة جميع كلاسات Tailwind من الـ HTML والاعتماد على الـ CSS أعلاه -->
+    
+    <div class="container">
+        
+        <!-- رأس التطبيق -->
+        <header>
+            <h1>أسلوبي</h1>
+            <p>أعد صياغة نصوصك بروح العارفين</p>
+        </header>
 
-<div class="container">
-    <h1 class="text-3xl font-bold text-center mb-6 text-indigo-300">مولد الايقونات الذكي</h1>
-    <p class="text-center text-gray-400 mb-6">أنشئ أيقونات فريدة بصيغ PNG بأسلوب SVG أو غيره.</p>
+        <!-- منطقة العمل الرئيسية -->
+        <main>
 
-    <div class="space-y-4">
-        <!-- Input Prompt -->
-        <div>
-            <label for="prompt" class="block text-sm font-medium text-gray-300 mb-1">أدخل وصف الأيقونة:</label>
-            <input type="text" id="prompt" value="A minimalist vector logo of a wolf's head in flat design" placeholder="مثال: شعار نسر بخطوط ذهبية بسيطة" class="w-full input-style">
-        </div>
+            <!-- الشبكة الخاصة بالمدخلات والمخرجات -->
+            <div class="grid-container">
+                
+                <!-- عمود النص الأصلي -->
+                <div>
+                    <label for="inputText">النص الأصلي</label>
+                    <textarea id="inputText"
+                        placeholder="أدخل النص الذي ترغب في إعادة صياغته هنا..."></textarea>
+                </div>
 
-        <!-- Style Selector -->
-        <div class="flex space-x-4 rtl:space-x-reverse items-end">
-            <div class="flex-1">
-                <label for="style" class="block text-sm font-medium text-gray-300 mb-1">اختر النمط:</label>
-                <!-- Removed "white background" from options, as it's added dynamically in JS -->
-                <select id="style" class="w-full input-style appearance-none bg-no-repeat bg-[length:1.5rem_1.5rem] bg-[position:left_0.75rem_center] rtl:bg-[position:right_0.75rem_center]">
-                    <option value="minimalist vector icon">أيقونة متجهية بسيطة (SVG Style)</option>
-                    <option value="flat material design icon">أيقونة تصميم مسطح</option>
-                    <option value="3D isometric icon">أيقونة ثلاثية الأبعاد متساوية القياس</option>
-                    <option value="detailed line art icon">أيقونة فن خطي مفصل</option>
-                    <option value="Neumorphism soft UI icon">أيقونة نيومورفيزم (واجهة ناعمة)</option>
-                    <option value="Glassmorphism frosted glass icon">أيقونة جلاسمورفيزم (زجاج مصنفر)</option>
-                    <option value="vibrant gradient colors icon">أيقونة بألوان متدرجة نابضة بالحياة</option>
-                    <option value="pixel art 8-bit icon">أيقونة فن البكسل (8-بت)</option>
-                    <option value="retro aesthetic icon">أيقونة بأسلوب ريترو قديم</option>
-                </select>
+                <!-- عمود النص المُعاد صياغته -->
+                <div>
+                    <label for="outputText">النص بالصياغة الجديدة</label>
+                    <textarea id="outputText"
+                        placeholder="ستظهر النتيجة هنا..." readonly></textarea>
+                </div>
             </div>
-            <!-- Size Selector (Enabled and value used in prompt) -->
-            <div class="w-24">
-                <label for="size" class="block text-sm font-medium text-gray-300 mb-1">الحجم (px):</label>
-                <input type="number" id="size" value="512" min="64" max="1024" class="w-full input-style text-center">
+
+            <!-- منطقة الأزرار والتحميل -->
+            <div class="button-container">
+                
+                <!-- زر إعادة الكتابة -->
+                <button id="rewriteButton">
+                    <!-- مؤشر التحميل (يظهر عند الحاجة) -->
+                    <div id="loadingIndicator" class="spinner hidden"></div>
+                    <span>إعادة كتابة</span>
+                </button>
+
+                <!-- زر نسخ النتيجة -->
+                <button id="copyButton">
+                    نسخ النص
+                </button>
             </div>
-        </div>
 
-        <!-- Transparency Toggle -->
-        <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-            <label for="transparentBgToggle" class="text-sm font-medium text-gray-300">معاينة وإزالة الخلفية</label>
-            <label class="switch">
-                <input type="checkbox" id="transparentBgToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
+            <!-- منطقة عرض الأخطاء -->
+            <div id="errorMessage"></div>
 
-
-        <!-- Generate Button -->
-        <button id="generateBtn" onclick="generateIcon()" class="btn-primary w-full py-3 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 rtl:space-x-reverse">
-            <span id="btnText">توليد الأيقونة</span>
-            <div id="loadingIndicator" class="loading-spinner hidden"></div>
-        </button>
+        </main>
     </div>
 
-    <!-- Message Box -->
-    <div id="messageBox" class="mt-6 p-3 text-sm text-center bg-yellow-900 border border-yellow-700 rounded-lg hidden" role="alert"></div>
+    <script>
+        // --- المنطق البرمجي للتطبيق ---
+        // (لا حاجة لتعديل هذا الجزء، سيعمل كما هو)
 
-    <!-- Icon Preview Area -->
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-3 text-gray-200 text-center">معاينة الأيقونة</h2>
-        <div id="iconPreview" class="icon-preview">
-            <p class="text-gray-500">سيظهر الناتج هنا...</p>
-        </div>
-    </div>
+        // الحصول على عناصر الواجهة
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const rewriteButton = document.getElementById('rewriteButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const copyButton = document.getElementById('copyButton');
 
-    <!-- Download Button -->
-    <button id="downloadBtn" onclick="downloadImage()" class="btn-primary w-full py-3 mt-6 rounded-xl font-semibold text-lg hidden">
-        تحميل كصورة PNG
-    </button>
+        // البرومبت (التوجيه) الخاص الذي طلبه المستخدم
+        const SYSTEM_PROMPT = `اكتب النص بأسلوب عرفاني عميق، مستحضرًا عمق البيان العرفاني واللغة الرمزية التي تمزج بين الظاهر والباطن، والشهود والوجود. اجعل العبارات تنبض بروح التوحيد والكشف، بحيث يظهر في الكلام أثر التجلي، وسريان الحقيقة في مظاهر الخلق.
 
-    <p class="text-xs text-center text-gray-500 mt-4">
-        ملاحظة: النماذج الحالية تولد صورًا نقطية (PNG). لضمان إزالة خلفية جيدة، نطلب من الذكاء الاصطناعي دائمًا خلفية بيضاء.
-    </p>
+استخدم لغة عربية فصحى عالية، نقية من الخطأ، ملتزمة بالقواعد النحوية والصرفية والبلاغية.
 
-</div>
+اجعل الجمل تتنفس بنَفَسٍ صوفيٍ حكميٍّ، فيه الإشارات لا التصريحات، وفيه الجمع بين الضدين: الوحدة في الكثرة، والظاهر في الباطن، والنور في الظلمة.
 
-<script>
-    // Global UI elements
-    const promptInput = document.getElementById('prompt');
-    const styleSelect = document.getElementById('style');
-    const sizeInput = document.getElementById('size'); // New reference
-    const generateBtn = document.getElementById('generateBtn');
-    const btnText = document.getElementById('btnText');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const iconPreview = document.getElementById('iconPreview');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const messageBox = document.getElementById('messageBox');
-    const transparentBgToggle = document.getElementById('transparentBgToggle');
+يجب أن تتسم العبارات بالتوازن الإيقاعي، والاستعارات الكونية، والتماثل بين المعنى واللفظ، وأن تسودها نغمة الخشوع والجلال.
 
-    // API Configuration
-    const apiKey = "AIzaSyDdAtMBXcRXJL49QhAsJWPquDZXxi0KOHc"; // ضع مفتاح API الخاص بك هنا
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+اجعل النص يعبّر عن الوعي بالحق، والانصهار في المحبوب، مع العروج من الكثرة إلى الوحدة. لا تُكثر الزخرفة، بل اجعل المعنى هو الجمال، واللفظ هو المظهر، والمعرفة هي القلب النابض للنص.
 
-    let originalImageDataUrl = null; // Stores the raw AI output (with white background)
-    let transparentImageDataUrl = null; // Stores the processed transparent output
+عند الكتابة، استحضر روح الحكمة العرفانية العالية، مع مراعاة وضوح المقاصد وسلامة التراكيب.
 
-    /**
-     * Helper function to show a temporary message.
-     * @param {string} message - The message text.
-     * @param {string} type - 'success', 'error', or 'warning'.
-     */
-    function showMessage(message, type) {
-        messageBox.textContent = message;
-        messageBox.className = 'mt-6 p-3 text-sm text-center rounded-lg';
-        messageBox.classList.remove('hidden');
+ملاحظة هامة: لا تقم بتشكيل النص (وضع الحركات) بشكل مبالغ فيه. اقتصر على الحركات الإعرابية الرئيسية والضرورية فقط لضبط المعنى.`;
 
-        if (type === 'error') {
-            messageBox.classList.add('bg-red-900', 'border-red-700', 'text-red-300');
-        } else if (type === 'success') {
-            messageBox.classList.add('bg-green-900', 'border-green-700', 'text-green-300');
-        } else {
-            messageBox.classList.add('bg-yellow-900', 'border-yellow-700', 'text-yellow-300');
-        }
+        /**
+         * دالة استدعاء Gemini API لإعادة صياغة النص
+         */
+        async function handleRewrite() {
+            const userText = inputText.value;
 
-        setTimeout(() => {
-            messageBox.classList.add('hidden');
-        }, 5000);
-    }
+            // التحقق من عدم إرسال نص فارغ
+            if (!userText.trim()) {
+                errorMessage.textContent = 'الرجاء إدخال نص لإعادة كتابته.';
+                return;
+            }
 
-    /**
-     * Sets the UI state to loading or idle.
-     * @param {boolean} isLoading
-     */
-    function setLoadingState(isLoading) {
-        generateBtn.disabled = isLoading;
-        if (isLoading) {
-            btnText.textContent = 'جاري التوليد...';
-            loadingIndicator.classList.remove('hidden');
-        } else {
-            btnText.textContent = 'توليد الأيقونة';
-            loadingIndicator.classList.add('hidden');
-        }
-    }
+            // تفعيل وضع التحميل
+            setLoadingState(true);
 
-    /**
-     * Removes a solid background (e.g., white) from an image data URL and returns a new transparent data URL.
-     * @param {string} imageDataUrl - The base64 data URL of the image.
-     * @returns {Promise<string>} A promise that resolves with the new transparent image data URL.
-     */
-    function removeBackground(imageDataUrl) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = img.width;
-                canvas.height = img.height;
+            // إعدادات الاتصال بالـ API
+            const apiKey = "AIzaSyDdAtMBXcRXJL49QhAsJWPquDZXxi0KOHc"; // سيتم توفيره تلقائيًا في البيئة
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-                ctx.drawImage(img, 0, 0);
-
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const pixels = imageData.data;
-
-                // Detect the background color from corners (assuming it's a solid, simple background, white is forced in prompt)
-                const cornerPixels = [
-                    [pixels[0], pixels[1], pixels[2]], // Top-left
-                    [pixels[(canvas.width - 1) * 4], pixels[(canvas.width - 1) * 4 + 1], pixels[(canvas.width - 1) * 4 + 2]], // Top-right
-                    [pixels[(canvas.height - 1) * canvas.width * 4], pixels[(canvas.height - 1) * canvas.width * 4 + 1], pixels[(canvas.height - 1) * canvas.width * 4 + 2]], // Bottom-left
-                    [pixels[(canvas.height * canvas.width - 1) * 4], pixels[(canvas.height * canvas.width - 1) * 4 + 1], pixels[(canvas.height * canvas.width - 1) * 4 + 2]] // Bottom-right
-                ];
-
-                let bgR = 0, bgG = 0, bgB = 0;
-                cornerPixels.forEach(p => { bgR += p[0]; bgG += p[1]; bgB += p[2]; });
-                bgR = Math.round(bgR / cornerPixels.length);
-                bgG = Math.round(bgG / cornerPixels.length);
-                bgB = Math.round(bgB / cornerPixels.length);
-
-                const tolerance = 30; // How close a pixel color needs to be to the background color to be made transparent
-
-                for (let i = 0; i < pixels.length; i += 4) {
-                    const r = pixels[i];
-                    const g = pixels[i + 1];
-                    const b = pixels[i + 2];
-
-                    if (Math.abs(r - bgR) < tolerance &&
-                        Math.abs(g - bgG) < tolerance &&
-                        Math.abs(b - bgB) < tolerance) {
-                        pixels[i + 3] = 0; // Set alpha to 0 (transparent)
-                    }
+            const payload = {
+                contents: [{ parts: [{ text: userText }] }],
+                systemInstruction: {
+                    parts: [{ text: SYSTEM_PROMPT }]
+                },
+                generationConfig: {
+                    temperature: 0.7, // يمكن تعديل الإبداعية هنا
                 }
-
-                ctx.putImageData(imageData, 0, 0);
-                resolve(canvas.toDataURL('image/png'));
             };
-            img.src = imageDataUrl;
-        });
-    }
 
-    /**
-     * Updates the preview and download button based on the toggle state.
-     */
-    function updatePreview() {
-        if (!originalImageDataUrl) return;
-
-        const isTransparent = transparentBgToggle.checked;
-        const urlToDisplay = isTransparent && transparentImageDataUrl ? transparentImageDataUrl : originalImageDataUrl;
-        
-        // Update Preview Image
-        iconPreview.innerHTML = `<img src="${urlToDisplay}" alt="Generated Icon">`;
-
-        // Update Preview Background (Checkerboard for transparent, solid for original)
-        if (isTransparent) {
-            // Apply Checkerboard pattern
-            iconPreview.style.backgroundImage = `linear-gradient(45deg, #2e3a4e 25%, transparent 25%),
-                                              linear-gradient(-45deg, #2e3a4e 25%, transparent 25%),
-                                              linear-gradient(45deg, transparent 75%, #2e3a4e 75%),
-                                              linear-gradient(-45deg, transparent 75%, #2e3a4e 75%)`;
-            iconPreview.style.backgroundSize = '20px 20px';
-            iconPreview.style.backgroundPosition = '0 0, 0 10px, 10px -10px, -10px 0px';
-            downloadBtn.textContent = 'تحميل كصورة PNG (شفافة)';
-        } else {
-            // Apply solid color (same as secondary-color background)
-            iconPreview.style.backgroundImage = 'none';
-            iconPreview.style.backgroundColor = '#1e293b'; 
-            downloadBtn.textContent = 'تحميل كصورة PNG (بالخلفية)';
-        }
-    }
-
-    // Listener for the toggle
-    transparentBgToggle.addEventListener('change', updatePreview);
-
-    /**
-     * Implements exponential backoff for retries.
-     * @param {function} fn - The function to retry.
-     * @param {number} maxRetries - Maximum number of retries.
-     * @returns {Promise<any>}
-     */
-    async function withExponentialBackoff(fn, maxRetries = 5) {
-        for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                return await fn();
-            } catch (error) {
-                if (attempt === maxRetries - 1) {
-                    throw error;
-                }
-                const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-    }
-
-    /**
-     * Main function to generate the icon.
-     */
-    async function generateIcon() {
-        const userPrompt = promptInput.value.trim();
-        const selectedStyle = styleSelect.value;
-        const iconSize = sizeInput.value; // Read the size value
-        
-        if (!userPrompt) {
-            showMessage('يرجى إدخال وصف للأيقونة.', 'warning');
-            return;
-        }
-
-        // Include size in the prompt to guide the AI model
-        const finalPrompt = `${userPrompt}, ${selectedStyle}, white background, icon, high resolution, centered, ${iconSize}x${iconSize} pixels`;
-
-        // Clear previous output
-        iconPreview.innerHTML = '<p class="text-gray-500">جاري الإرسال...</p>';
-        downloadBtn.classList.add('hidden');
-        originalImageDataUrl = null;
-        transparentImageDataUrl = null;
-        setLoadingState(true);
-        transparentBgToggle.checked = false; // Reset toggle to show original image first
-
-        const payload = {
-            instances: {
-                prompt: finalPrompt
-            },
-            parameters: {
-                sampleCount: 1,
-                outputMimeType: "image/png"
-            }
-        };
-
-        try {
-            const apiCall = async () => {
-                const response = await fetch(apiUrl, {
+                // تنفيذ الاتصال بالـ API مع محاولات إعادة
+                const response = await fetchWithBackoff(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('API Error:', errorData);
-                    throw new Error(`فشل API: ${response.statusText}`);
+                    throw new Error(`API request failed with status: ${response.status}`);
                 }
-                return response.json();
-            };
 
-            const result = await withExponentialBackoff(apiCall);
+                const result = await response.json();
+                
+                // تحليل الاستجابة
+                if (result.candidates && result.candidates.length > 0) {
+                     if (result.candidates[0].finishReason === "SAFETY") {
+                        errorMessage.textContent = "تعذر إنشاء النص بسبب قيود السلامة.";
+                        outputText.value = "المحتوى المطلوب يتعارض مع سياسات السلامة.";
+                     } else if (result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts[0].text) {
+                        const generatedText = result.candidates[0].content.parts[0].text;
+                        outputText.value = generatedText; // عرض النتيجة
+                     } else {
+                         throw new Error('No valid text found in API response.');
+                     }
+                } else if (result.promptFeedback && result.promptFeedback.blockReason) {
+                    errorMessage.textContent = `تم حظر الطلب: ${result.promptFeedback.blockReason}`;
+                    outputText.value = "تم حظر النص المدخل. يرجى تعديله والمحاولة مرة أخرى.";
+                } else {
+                    throw new Error('Invalid API response structure.');
+                }
 
-            if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
-                const base64Data = result.predictions[0].bytesBase64Encoded;
-                
-                // 1. Store Original Image URL
-                originalImageDataUrl = `data:image/png;base64,${base64Data}`;
-                
-                // 2. Process for Transparency (Do this once, store result)
-                iconPreview.innerHTML = '<p class="text-gray-500">تم التوليد. جاري معالجة الخلفية...</p>';
-                transparentImageDataUrl = await removeBackground(originalImageDataUrl);
-                
-                // 3. Display the result according to the toggle state (default is original)
-                updatePreview(); 
-                
-                downloadBtn.classList.remove('hidden');
-                showMessage('تم توليد الأيقونة ومعالجة الخلفية بنجاح!', 'success');
-            } else {
-                iconPreview.innerHTML = '<p class="text-red-400 text-center">لم يتم العثور على صورة في الرد.</p>';
-                showMessage('حدث خطأ: لم يتم العثور على بيانات الصورة.', 'error');
+            } catch (error) {
+                console.error('Error rewriting text:', error);
+                errorMessage.textContent = `حدث خطأ: ${error.message}. يرجى المحاولة مرة أخرى.`;
+                outputText.value = "حدث خطأ أثناء معالجة النص.";
+            } finally {
+                // إلغاء تفعيل وضع التحميل
+                setLoadingState(false);
             }
-
-        } catch (error) {
-            console.error('Generation Failed:', error);
-            iconPreview.innerHTML = '<p class="text-red-400 text-center">فشل التوليد. تحقق من وحدة التحكم (Console).</p>';
-            showMessage(`خطأ في الاتصال: ${error.message}`, 'error');
-
-        } finally {
-            setLoadingState(false);
         }
-    }
-
-    /**
-     * Downloads the generated image as a PNG file.
-     */
-    function downloadImage() {
-        const isTransparent = transparentBgToggle.checked;
-        // Choose which URL to download based on the current toggle state
-        const urlToDownload = isTransparent ? transparentImageDataUrl : originalImageDataUrl;
-
-        if (urlToDownload) {
-            const link = document.createElement('a');
-            const fileName = promptInput.value.trim().substring(0, 30).replace(/[^a-z0-9]/gi, '_') || 'ai_icon';
-            
-            link.href = urlToDownload;
-            link.download = `${fileName}${isTransparent ? '_transparent' : '_original_bg'}.png`;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            showMessage('يرجى توليد أيقونة أولاً.', 'warning');
+        
+        /**
+         * دالة لتنفيذ الاتصال مع محاولات إعادة عند الفشل (Exponential Backoff)
+         */
+        async function fetchWithBackoff(url, options, maxRetries = 3) {
+            let delay = 1000; // 1 ثانية
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response; // نجاح
+                    }
+                    // إعادة المحاولة فقط لأخطاء الخادم (5xx) أو 429
+                    if (response.status === 429 || response.status >= 500) {
+                        // لا تسجل في الكونسول، انتظر وأعد المحاولة
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; // مضاعفة مدة الانتظار
+                    } else {
+                        return response; // إرجاع الاستجابة للفشل (مثل 400)
+                    }
+                } catch (error) {
+                    // أخطاء الشبكة
+                    if (i === maxRetries - 1) throw error; // إطلاق الخطأ بعد آخر محاولة
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+            throw new Error('Max retries reached for API call.');
         }
-    }
-</script>
 
+        /**
+         * دالة لتغيير حالة الواجهة (تحميل أو عادي)
+         */
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                rewriteButton.disabled = true;
+                loadingIndicator.classList.remove('hidden');
+                outputText.value = 'تتم الصياغة الآن... يرجى الانتظار...';
+                errorMessage.textContent = '';
+            } else {
+                rewriteButton.disabled = false;
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /**
+         * دالة لنسخ النص إلى الحافظة
+         * (تستخدم document.execCommand حسب التعليمات)
+         */
+        function copyToClipboard() {
+            if (!outputText.value) return;
+
+            outputText.select();
+            // للعمل على الأجهزة المحمولة
+            outputText.setSelectionRange(0, 99999); 
+
+            try {
+                document.execCommand('copy');
+                copyButton.textContent = 'تم النسخ!';
+                setTimeout(() => { copyButton.textContent = 'نسخ النص'; }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                errorMessage.textContent = "فشل النسخ. يرجى النسخ يدويًا.";
+            }
+            
+            // إلغاء التحديد
+            window.getSelection().removeAllRanges();
+        }
+
+        // ربط الأحداث بالأزرار
+        rewriteButton.addEventListener('click', handleRewrite);
+        copyButton.addEventListener('click', copyToClipboard);
+
+    </script>
 </body>
 </html>
+
 
